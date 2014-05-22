@@ -38,7 +38,7 @@ public class Drawing{
             public void mouseClicked(MouseEvent me) {
                 if (me.getClickCount() == 2 && !me.isConsumed()){
                     me.consume();
-                    point.add(new Point(me.getX(),me.getY(),point.size()));
+                    point.add(new Point(me.getX(),me.getY(),point.size(),true));
                 }
             }
             @Override
@@ -89,7 +89,7 @@ public class Drawing{
             
         });
         for (int u = 0; u < entities; u++){
-             point.add(new Point(r.nextInt(Height), r.nextInt(Width), u));
+             point.add(new Point(r.nextInt(Height), r.nextInt(Width),u,false));
              point.get(point.size()-1).setMass(r.nextDouble()*r.nextInt(50)+1);
         }
         /*point.add(new Point(200,259,1));
@@ -116,14 +116,21 @@ public class Drawing{
         long interval = sToNs / optimalFPS;
         while (true){
             time2 = System.nanoTime();
-            
-            if (time2 - time1 >= interval && isRunning) {
+            boolean run = true;
+            for (int i = 0; i < point.size(); i++){
+                if (point.get(i).isClickCreated()){
+                    run = false;
+                }
+            }
+            if (time2 - time1 >= interval && isRunning && run) {
                 delta = (time2 - time1) / (double) sToNs;
                 //System.out.println((int)(1.0 / delta));
                 update(point);
                 time1 = time2;
             }else if (!isRunning){
                 time1 = time2;
+            }else if (!run){
+                
             }
             g.clearRect(0, 0, Width, Height);
             paints(g);

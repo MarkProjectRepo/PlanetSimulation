@@ -21,12 +21,17 @@ public class Point{
         Boolean coll = false;
         final private double G = 20;
          
-        public Point(double x, double y, int index){
+        public Point(double x, double y, int index, boolean clicked){
             this.x = x;
             this.y = y;
             this.identifier = index;
             this.mass = 1;
+            this.clicked = clicked;
             c = Color.white;
+        }
+        
+        public boolean isClickCreated(){
+            return clicked;
         }
         
         public void reset(){
