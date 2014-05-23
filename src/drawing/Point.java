@@ -67,10 +67,13 @@ public class Point{
         public void setDy(double dy){
             this.dy = dy;
         }
-        public void update(ArrayList<Point> point, double delta){
+        public void regUpdate(ArrayList<Point> point, double delta){
             setD(point, delta);
             this.x += dx*delta;
             this.y += dy*delta;
+        }
+        public void clickUpdate(Point point, double massIncrement){
+            
         }
         public void setMass(double mass){
             this.mass = mass;
@@ -129,12 +132,13 @@ public class Point{
          
         public void draw(Graphics g){
             g.setColor(c);
-            String space = Integer.toString(this.identifier);
+            String space = Double.toString(this.mass);
             //g.drawRect((int)x, (int)y, Sd, Sd);
             g.drawOval((int)this.x, (int)this.y, Sd, Sd);
-            //g.drawChars(space.toCharArray(), 0, space.toCharArray().length, (int)x+2, (int)y-3);
+            if (clicked){
+                g.drawChars(space.toCharArray(), 0, space.toCharArray().length, (int)x-2, (int)y-3);
+            }
             //g.drawLine((int)x, (int)y, (int)x, (int)y);
             //c = Color.white;
         }
-        
     }

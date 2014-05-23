@@ -12,12 +12,12 @@ public class Drawing{
     public boolean isRunning = true;
     public boolean clicked = false;
     public boolean wasRunning = false;
+    public boolean run = true;
     double mx = Double.MAX_VALUE;
     double my = Double.MAX_VALUE;
     Collision collide = new Collision();
     Window window = new Window();
     
-    int Height = window.Height, Width = window.Width;
     
     ArrayList<Point> point = new ArrayList<>();
     Random r = new Random();
@@ -89,7 +89,7 @@ public class Drawing{
             
         });
         for (int u = 0; u < entities; u++){
-             point.add(new Point(r.nextInt(Height), r.nextInt(Width),u,false));
+             point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width),u,false));
              point.get(point.size()-1).setMass(r.nextDouble()*r.nextInt(50)+1);
         }
         /*point.add(new Point(200,259,1));
@@ -116,7 +116,6 @@ public class Drawing{
         long interval = sToNs / optimalFPS;
         while (true){
             time2 = System.nanoTime();
-            boolean run = true;
             for (int i = 0; i < point.size(); i++){
                 if (point.get(i).isClickCreated()){
                     run = false;
@@ -130,19 +129,19 @@ public class Drawing{
             }else if (!isRunning){
                 time1 = time2;
             }else if (!run){
-                
+                time1 = time2;
             }
-            g.clearRect(0, 0, Width, Height);
+            g.clearRect(0, 0, window.Width, window.Height);
             paints(g);
-            
+            run = true;
             window.bufferStrategy.show();
         }
     }
     
     public void paints(Graphics g){
         for (int i =0; i < point.size(); i++){
-            if (point.get(i).getX() > -10 && point.get(i).getX() < Width ||
-                point.get(i).getY() > -10 && point.get(i).getY() < Height){
+            if (point.get(i).getX() > -10 && point.get(i).getX() < window.Width ||
+                point.get(i).getY() > -10 && point.get(i).getY() < window.Height){
                 point.get(i).draw(g);
             }
         }
@@ -150,7 +149,11 @@ public class Drawing{
     
     public void update(ArrayList<Point> point){
         for (int i = 0; i < point.size(); i++){
-            point.get(i).update(point, delta);
+            if (run){
+                point.get(i).regUpdate(point, delta);
+            }else{
+                
+            }
             for (int c = 0; c < point.size(); c++){
                 if (point.get(i).colliding(point.get(c)) && point.get(i).getIdentifier() != point.get(c).getIdentifier()){
                     collide.Coll(point.get(i), point.get(c));
