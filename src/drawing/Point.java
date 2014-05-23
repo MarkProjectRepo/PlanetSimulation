@@ -33,7 +33,9 @@ public class Point{
         public boolean isClickCreated(){
             return clicked;
         }
-        
+        public void setState(boolean clicked){
+            this.clicked = clicked;
+        }
         public void reset(){
             this.coll = false;
         }
@@ -72,8 +74,8 @@ public class Point{
             this.x += dx*delta;
             this.y += dy*delta;
         }
-        public void clickUpdate(Point point, double massIncrement){
-            
+        public void clickUpdate(double massIncrement){
+            this.mass += massIncrement;
         }
         public void setMass(double mass){
             this.mass = mass;

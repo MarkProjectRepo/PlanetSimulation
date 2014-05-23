@@ -3,18 +3,22 @@ package drawing;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Random;
+import listeners.*;
 
 public class Drawing{
     public double delta;
-    public final int entities = 50;
+    public final int entities = 500;
     public boolean isRunning = true;
     public boolean clicked = false;
     public boolean wasRunning = false;
     public boolean run = true;
     double mx = Double.MAX_VALUE;
     double my = Double.MAX_VALUE;
+    double wheelIncrease = 0;
     Collision collide = new Collision();
     Window window = new Window();
     
@@ -39,6 +43,11 @@ public class Drawing{
                 if (me.getClickCount() == 2 && !me.isConsumed()){
                     me.consume();
                     point.add(new Point(me.getX(),me.getY(),point.size(),true));
+                }else if(!run){
+                    for (int i = 0; i < point.size(); i++){
+                        point.get(i).setState(false);
+                    }
+                    run = true;
                 }
             }
             @Override
@@ -88,6 +97,17 @@ public class Drawing{
             }
             
         });
+        
+        window.mainCanvas.addMouseWheelListener(new MouseWheelListener(){
+            
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent mwe) {
+                if (!run){
+                    wheelIncrease = -mwe.getWheelRotation();
+                }
+            }
+        });
+        
         for (int u = 0; u < entities; u++){
              point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width),u,false));
              point.get(point.size()-1).setMass(r.nextDouble()*r.nextInt(50)+1);
@@ -115,10 +135,12 @@ public class Drawing{
         long sToNs = 1000000000;
         long interval = sToNs / optimalFPS;
         while (true){
+            int identify = 1111111111;
             time2 = System.nanoTime();
             for (int i = 0; i < point.size(); i++){
                 if (point.get(i).isClickCreated()){
                     run = false;
+                    identify = i;
                 }
             }
             if (time2 - time1 >= interval && isRunning && run) {
@@ -130,10 +152,17 @@ public class Drawing{
                 time1 = time2;
             }else if (!run){
                 time1 = time2;
+                if (point.get(identify).getMass() > 1){
+                    point.get(identify).clickUpdate(wheelIncrease);
+                }else if (point.get(identify).getMass() == 1){
+                    if (wheelIncrease > 0){
+                        point.get(identify).clickUpdate(wheelIncrease);
+                    }
+                }
+                wheelIncrease = 0;
             }
             g.clearRect(0, 0, window.Width, window.Height);
             paints(g);
-            run = true;
             window.bufferStrategy.show();
         }
     }
@@ -151,8 +180,6 @@ public class Drawing{
         for (int i = 0; i < point.size(); i++){
             if (run){
                 point.get(i).regUpdate(point, delta);
-            }else{
-                
             }
             for (int c = 0; c < point.size(); c++){
                 if (point.get(i).colliding(point.get(c)) && point.get(i).getIdentifier() != point.get(c).getIdentifier()){
