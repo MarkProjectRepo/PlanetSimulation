@@ -11,7 +11,7 @@ import listeners.*;
 
 public class Drawing{
     public double delta;
-    public final int entities = 500;
+    public final int entities = 5;
     public boolean isRunning = true;
     public boolean clicked = false;
     public boolean wasRunning = false;
@@ -42,7 +42,8 @@ public class Drawing{
             public void mouseClicked(MouseEvent me) {
                 if (me.getClickCount() == 2 && !me.isConsumed()){
                     me.consume();
-                    point.add(new Point(me.getX(),me.getY(),point.size(),true));
+                    point.add(new Point(me.getX(),me.getY(), 1,point.size(),true));
+                    isRunning = true;
                 }else if(!run){
                     for (int i = 0; i < point.size(); i++){
                         point.get(i).setState(false);
@@ -89,7 +90,8 @@ public class Drawing{
                     diffX = me.getX()-mx;
                     diffY = me.getY()-my;
                     for (int i = 0; i < point.size(); i++){
-                        point.get(i).setCoord(point.get(i).getX()+diffX, point.get(i).getY()+diffY);
+                        point.get(i).setX(point.get(i).getX()+diffX);
+                        point.get(i).setY(point.get(i).getY()+diffY);
                     }
                     mx = me.getX();
                     my = me.getY();
@@ -108,18 +110,16 @@ public class Drawing{
             }
         });
         
-        for (int u = 0; u < entities; u++){
-             point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width),u,false));
-             point.get(point.size()-1).setMass(r.nextDouble()*r.nextInt(50)+1);
-        }
-        /*point.add(new Point(200,259,1));
-        point.get(point.size()-1).setMass(500);
+        /*for (int u = 0; u < entities; u++){
+        	double rMass = r.nextDouble()*r.nextInt(50)+1;
+            point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width), rMass,u,false));
+        }*/
+        point.add(new Point(200,254,10,0,false));
         point.get(point.size()-1).setDx(0);
-        point.add(new Point(160,250,2));
-        point.get(point.size()-1).setMass(1);
+        point.add(new Point(160,250,10,1,false));
         point.get(point.size()-1).setDx(10);
         point.get(point.size()-1).setDy(0);
-        point.add(new Point(120,200,3));
+        /*point.add(new Point(120,200,3));
         point.get(point.size()-1).setMass(1);
         point.get(point.size()-1).setDx(10);
         point.get(point.size()-1).setDy(3);*/
@@ -152,12 +152,11 @@ public class Drawing{
                 time1 = time2;
             }else if (!run){
                 time1 = time2;
-                if (point.get(identify).getMass() > 1){
-                    point.get(identify).clickUpdate(wheelIncrease);
-                }else if (point.get(identify).getMass() == 1){
-                    if (wheelIncrease > 0){
-                        point.get(identify).clickUpdate(wheelIncrease);
-                    }
+                isRunning = true;
+                if (point.get(identify).getMass() > 1 && wheelIncrease != 0){
+                    point.get(identify).incrementMass(wheelIncrease);
+                }else if (point.get(identify).getMass() == 1 && wheelIncrease > 0){
+                        point.get(identify).incrementMass(wheelIncrease);
                 }
                 wheelIncrease = 0;
             }
@@ -183,6 +182,7 @@ public class Drawing{
             }
             for (int c = 0; c < point.size(); c++){
                 if (point.get(i).colliding(point.get(c)) && point.get(i).getIdentifier() != point.get(c).getIdentifier()){
+                	System.out.println(point.get(i).getRadius()+", "+point.get(c).getRadius());
                     collide.Coll(point.get(i), point.get(c));
                 }
             }
