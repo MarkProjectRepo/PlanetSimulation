@@ -114,7 +114,7 @@ public class Drawing{
         	double rMass = r.nextDouble()*r.nextInt(50)+1;
             point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width), rMass,u,false));
         }*/
-        point.add(new Point(200,254,10,0,false));
+        point.add(new Point(200,251,10,0,false));
         point.get(point.size()-1).setDx(0);
         point.add(new Point(160,250,10,1,false));
         point.get(point.size()-1).setDx(10);
@@ -181,9 +181,11 @@ public class Drawing{
                 point.get(i).regUpdate(point, delta);
             }
             for (int c = 0; c < point.size(); c++){
-                if (point.get(i).colliding(point.get(c)) && point.get(i).getIdentifier() != point.get(c).getIdentifier()){
-                	System.out.println(point.get(i).getRadius()+", "+point.get(c).getRadius());
-                    collide.Coll(point.get(i), point.get(c));
+                if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
+                    if (point.get(i).colliding(point.get(c))){
+
+                        collide.Coll(point.get(i), point.get(c));
+                    }
                 }
             }
         }

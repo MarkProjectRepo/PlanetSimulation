@@ -28,9 +28,6 @@ public class Collision {
             return false;
         }
     }
-    private double dotProduct (Point point1, Point point2){
-        return (point1.getX()*point2.getX())+(point1.getY()*point2.getY());
-    }
     
     public void Coll(Point point1, Point point2){
         

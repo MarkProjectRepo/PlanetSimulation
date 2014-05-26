@@ -30,7 +30,7 @@ public class Point{
             this.identifier = index;
             this.clicked = clicked;
             this.mass = mass;
-            this.radius = r.nextDouble()*r.nextInt(10)+2;
+            this.radius = r.nextDouble()*r.nextInt((int)this.mass)+2;
             c = Color.white;
         }
         
@@ -137,7 +137,7 @@ public class Point{
          * @param delta (double)
          */
         public void regUpdate(ArrayList<Point> point, double delta){
-            setD(point, delta);
+            setD(point);
             this.x += dx*delta;
             this.y += dy*delta;
         }
@@ -189,7 +189,7 @@ public class Point{
         }
         
         public boolean colliding(Point p){
-            if (this.distance(this.x, p.getX(), this.y, p.getY())-(this.radius+p.getRadius()) <= 0){
+            if (this.distance(this.x, p.x, this.y, p.y) <= (this.radius+p.radius)){
                 return true;
             }else{
                 return false;
@@ -200,7 +200,7 @@ public class Point{
             return G*mass1/(Math.pow(distance, 2) + 1);
         }
         
-        private void setD(ArrayList<Point> p, double delta){
+        private void setD(ArrayList<Point> p){
             for (int i = 0; i < p.size(); i++){
                 double diffX = this.x - p.get(i).getX();
                 double diffY = this.y - p.get(i).getY();
