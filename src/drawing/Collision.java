@@ -4,15 +4,14 @@
  */
 package drawing;
 
+import math.VectorMath;
 /**
  *
  * @author matra4214
  */
 public class Collision {
     
-    private double collAngle(double diffX, double diffY){
-        return Math.atan2(diffY, diffX);
-    }
+    VectorMath math = new VectorMath();
     
     private boolean doTheMath(Point point1, Point point2){
         double V2xsubV1x = (point2.getDx()-point1.getDx());
@@ -29,15 +28,18 @@ public class Collision {
         }
     }
     
+    public boolean colliding(Point p1, Point p2){
+            double dist = math.distance(p1.getX(), p2.getX(), p1.getY(), p2.getY());
+            
+            if (dist < (p2.getRadius())){
+                System.out.println(dist+","+(p1.getRadius()+p2.getRadius()));
+                return true;
+            }else{
+                return false;
+            }
+        }
+    
     public void Coll(Point point1, Point point2){
-        
-        double diffX = point1.getX()-point2.getX();
-        double diffY = point1.getY()-point2.getY();
-        
-        double cAngle = collAngle(diffX, diffY);
-        
-        double massDiff1 = point1.getMass()-point2.getMass();
-        double massDiff2 = point2.getMass()-point1.getMass();
         
         if (doTheMath(point1, point2)){
             double velocity1x = (2*point2.getMass())/(point1.getMass()+point2.getMass());

@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
+import math.VectorMath;
 /**
  * @author matra4214
  */
@@ -16,10 +17,10 @@ public class Point{
         private double x, y, dx, dy, mass;
         private boolean clicked;
         int identifier;
-        
+        VectorMath math = new VectorMath();
         Color c;
         Random r = new Random();
-        private double radius;
+        int radius;
         
         Boolean coll = false;
         final private double G = 20;
@@ -30,7 +31,7 @@ public class Point{
             this.identifier = index;
             this.clicked = clicked;
             this.mass = mass;
-            this.radius = r.nextDouble()*r.nextInt((int)this.mass)+2;
+            this.radius = (int)(r.nextDouble()*r.nextInt((int)this.mass)+2);
             c = Color.white;
         }
         
@@ -176,9 +177,7 @@ public class Point{
             return mass;
         }
         
-        public double distance(double x1, double x2, double y1, double y2){
-            return Math.sqrt(Math.pow(x2-x1, 2)+Math.pow(y2-y1, 2));
-        }
+        
         
         public double getVelocity(){
             return Math.sqrt(Math.pow(this.dx, 2)+Math.pow(this.dy,2));
@@ -188,13 +187,7 @@ public class Point{
             return Math.atan2(this.dy, this.dx);
         }
         
-        public boolean colliding(Point p){
-            if (this.distance(this.x, p.x, this.y, p.y) <= (this.radius+p.radius)){
-                return true;
-            }else{
-                return false;
-            }
-        }
+        
         
         private double gravitate(double distance, double mass1){
             return G*mass1/(Math.pow(distance, 2) + 1);
@@ -202,12 +195,11 @@ public class Point{
         
         private void setD(ArrayList<Point> p){
             for (int i = 0; i < p.size(); i++){
-                double diffX = this.x - p.get(i).getX();
-                double diffY = this.y - p.get(i).getY();
+                
                 if (p.get(i).getIdentifier() != this.identifier){
-                    double dist = distance (p.get(i).getX(), x, p.get(i).getY(), y);
+                    double dist = math.distance (p.get(i).getX(), x, p.get(i).getY(), y);
                     
-                    if (this.distance(this.x, p.get(i).getX(), this.y, p.get(i).getY()) >= this.radius+5){
+                    if (dist >= this.radius+5){
                         double g = -gravitate(dist, p.get(i).mass);
                         //dx += (g*diffX)/dist;
                         //dy += (g*diffY)/dist;
@@ -223,7 +215,7 @@ public class Point{
             
             String space = Double.toString(this.mass);
             
-            g.drawOval((int)this.x, (int)this.y, (int)radius, (int)radius);
+            g.drawOval((int)this.x, (int)this.y, radius, radius);
             
             if (clicked){
                 g.drawChars(space.toCharArray(), 0, space.toCharArray().length, (int)x-2, (int)y-3);
