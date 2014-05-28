@@ -12,7 +12,7 @@ import math.VectorMath;
 
 public class Drawing{
     public double delta;
-    public final int entities = 500;
+    public final int entities = 50;
     public boolean isRunning = true;
     public boolean clicked = false;
     public boolean wasRunning = false;
@@ -20,6 +20,7 @@ public class Drawing{
     double mx = Double.MAX_VALUE;
     double my = Double.MAX_VALUE;
     double wheelIncrease = 0;
+    int identify = 1111111111;
     VectorMath math = new VectorMath();
     Collision collide = new Collision();
     Window window = new Window();
@@ -35,6 +36,13 @@ public class Drawing{
             public void keyPressed(KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_SPACE){
                     isRunning = !isRunning;
+                }
+                if (ke.getKeyCode() == KeyEvent.VK_R && run){
+                    double rMass = r.nextDouble()*r.nextInt(50)+1;
+                    point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width), rMass,point.size(),false));
+                }else if (ke.getKeyCode() == KeyEvent.VK_R && !run){
+                    double rMass = r.nextDouble()*r.nextInt(50)+1;
+                    point.get(identify).setMass(rMass);
                 }
             }
         });
@@ -137,7 +145,7 @@ public class Drawing{
         long sToNs = 1000000000;
         long interval = sToNs / optimalFPS;
         while (true){
-            int identify = 1111111111;
+            
             time2 = System.nanoTime();
             for (int i = 0; i < point.size(); i++){
                 if (point.get(i).isClickCreated()){
