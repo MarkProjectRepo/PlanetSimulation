@@ -12,7 +12,7 @@ import math.VectorMath;
 
 public class Drawing{
     public double delta;
-    public final int entities = 5;
+    public final int entities = 500;
     public boolean isRunning = true;
     public boolean clicked = false;
     public boolean wasRunning = false;
@@ -112,11 +112,11 @@ public class Drawing{
             }
         });
         
-        /*for (int u = 0; u < entities; u++){
+        for (int u = 0; u < entities; u++){
         	double rMass = r.nextDouble()*r.nextInt(50)+1;
             point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width), rMass,u,false));
-        }*/
-        point.add(new Point(200,250,10,0,false));
+        }
+        /*point.add(new Point(200,250,10,0,false));
         point.get(point.size()-1).setDx(0);
         point.add(new Point(160,250,10,1,false));
         point.get(point.size()-1).setDx(10);
@@ -178,6 +178,9 @@ public class Drawing{
     }
     
     public void update(ArrayList<Point> point){
+        
+        ArrayList<Integer> checked = new ArrayList();
+        
         if (run){
             
             for (int i = 0; i < point.size(); i++){
@@ -186,14 +189,19 @@ public class Drawing{
                 
                 for (int c = 0; c < point.size(); c++){
                     
-                    if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
-                        
-                        if (collide.colliding(point.get(i), point.get(c))){
+                    if (c != i){
+                        if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
                             
-                            collide.Coll(point.get(i), point.get(c));
+                            if (collide.colliding(point.get(i), point.get(c))){
+
+                                collide.Coll(point.get(i), point.get(c));
+                                checked.add(i);
+                                checked.add(c);
+                            }
                         }
                     }
                 }
+                
             }
         }
     }

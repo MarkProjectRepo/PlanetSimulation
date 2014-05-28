@@ -31,8 +31,7 @@ public class Collision {
     public boolean colliding(Point p1, Point p2){
             double dist = math.distance(p1.getX(), p2.getX(), p1.getY(), p2.getY());
             
-            if (dist < (p2.getRadius())){
-                System.out.println(dist+","+(p1.getRadius()+p2.getRadius()));
+            if (dist < (p1.getRadius()+p2.getRadius())){
                 return true;
             }else{
                 return false;

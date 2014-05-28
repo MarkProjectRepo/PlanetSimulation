@@ -20,7 +20,7 @@ public class Point{
         VectorMath math = new VectorMath();
         Color c;
         Random r = new Random();
-        int radius;
+        double diameter;
         
         Boolean coll = false;
         final private double G = 20;
@@ -31,7 +31,7 @@ public class Point{
             this.identifier = index;
             this.clicked = clicked;
             this.mass = mass;
-            this.radius = (int)(r.nextDouble()*r.nextInt((int)this.mass)+2);
+            this.diameter = r.nextDouble()*r.nextInt((int)this.mass)+2;
             c = Color.white;
         }
         
@@ -105,7 +105,7 @@ public class Point{
          * @param x (double)
          */
         public void setX(double x){
-        	this.x = x;
+            this.x = x;
         }
         
         /**
@@ -113,7 +113,7 @@ public class Point{
          * @param y (double)
          */
         public void setY(double y){
-        	this.y = y;
+            this.y = y;
         }
         
         /**
@@ -149,7 +149,7 @@ public class Point{
          */
         public void incrementMass(double massIncrement){
             this.mass += massIncrement;
-            this.radius += massIncrement;
+            this.diameter += massIncrement;
         }
         
         /**
@@ -157,7 +157,7 @@ public class Point{
          * @return radius (double)
          */
         public double getRadius(){
-        	return this.radius;
+            return this.diameter/2;
         }
         
         /**
@@ -195,14 +195,15 @@ public class Point{
         
         private void setD(ArrayList<Point> p){
             for (int i = 0; i < p.size(); i++){
-                
+                double diffX = this.x-p.get(i).getX();
+                double diffY = this.y-p.get(i).getY();
                 if (p.get(i).getIdentifier() != this.identifier){
                     double dist = math.distance (p.get(i).getX(), x, p.get(i).getY(), y);
                     
-                    if (dist >= this.radius+5){
+                    if (dist >= this.diameter+5){
                         double g = -gravitate(dist, p.get(i).mass);
-                        //dx += (g*diffX)/dist;
-                        //dy += (g*diffY)/dist;
+                        dx += (g*diffX)/dist;
+                        dy += (g*diffY)/dist;
                     }
                 }
             }
@@ -215,8 +216,9 @@ public class Point{
             
             String space = Double.toString(this.mass);
             
-            g.drawOval((int)this.x, (int)this.y, radius, radius);
+            g.drawOval((int)(this.x-this.getRadius()), (int)(this.y-this.getRadius()), (int)diameter, (int)diameter);
             
+            //g.drawOval((int)this.x, (int)this.y, 1, 1);
             if (clicked){
                 g.drawChars(space.toCharArray(), 0, space.toCharArray().length, (int)x-2, (int)y-3);
             }
