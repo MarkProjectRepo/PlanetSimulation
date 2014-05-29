@@ -23,7 +23,7 @@ public class Point{
         double diameter;
         
         Boolean coll = false;
-        final private double G = 20;
+        final private double G = 1;
          
         public Point(double x, double y, double mass, int index, boolean clicked){
             this.x = x;
@@ -152,12 +152,21 @@ public class Point{
             this.diameter += massIncrement;
         }
         
+        public void randomizeMassandRadius(int max){
+            double rMass = r.nextDouble()*r.nextInt(max)+1;
+            this.mass = rMass;
+            this.diameter = r.nextDouble()*r.nextInt((int)this.mass)+2;
+        }
+        
         /**
          * Radius of this point
          * @return radius (double)
          */
         public double getRadius(){
             return this.diameter/2;
+        }
+        public void setDiameter(double diameter){
+            this.diameter = diameter;
         }
         
         /**

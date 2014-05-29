@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import javax.swing.JButton;
+
 import java.util.ArrayList;
 import java.util.Random;
 import listeners.*;
@@ -12,7 +14,7 @@ import math.VectorMath;
 
 public class Drawing{
     public double delta;
-    public final int entities = 50;
+    public final int entities = 500;
     public boolean isRunning = true;
     public boolean clicked = false;
     public boolean wasRunning = false;
@@ -20,6 +22,8 @@ public class Drawing{
     double mx = Double.MAX_VALUE;
     double my = Double.MAX_VALUE;
     double wheelIncrease = 0;
+    Button focusToggle;
+    int max = 0;
     int identify = 1111111111;
     VectorMath math = new VectorMath();
     Collision collide = new Collision();
@@ -30,6 +34,8 @@ public class Drawing{
     Random r = new Random();
     
     public Drawing() {
+        
+        
         window.init();
         window.mainCanvas.addKeyListener(new KeyListen(){
             @Override
@@ -41,8 +47,7 @@ public class Drawing{
                     double rMass = r.nextDouble()*r.nextInt(50)+1;
                     point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width), rMass,point.size(),false));
                 }else if (ke.getKeyCode() == KeyEvent.VK_R && !run){
-                    double rMass = r.nextDouble()*r.nextInt(50)+1;
-                    point.get(identify).setMass(rMass);
+                    point.get(identify).randomizeMassandRadius(max);
                 }
             }
         });
@@ -121,12 +126,13 @@ public class Drawing{
         });
         
         for (int u = 0; u < entities; u++){
-        	double rMass = r.nextDouble()*r.nextInt(50)+1;
+            double rMass = r.nextDouble()*r.nextInt(50)+1;
             point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width), rMass,u,false));
         }
-        /*point.add(new Point(200,250,10,0,false));
+        /*point.add(new Point(200,250,1000000,501,false));
         point.get(point.size()-1).setDx(0);
-        point.add(new Point(160,250,10,1,false));
+        point.get(point.size()-1).setDiameter(10);
+        /*point.add(new Point(160,250,10,1,false));
         point.get(point.size()-1).setDx(10);
         point.get(point.size()-1).setDy(0);
         /*point.add(new Point(120,200,3));
@@ -155,7 +161,7 @@ public class Drawing{
             }
             if (time2 - time1 >= interval && isRunning && run) {
                 delta = (time2 - time1) / (double) sToNs;
-                //System.out.println((int)(1.0 / delta));
+                System.out.println((int)(1.0 / delta));
                 update(point);
                 time1 = time2;
             }else if (!isRunning){
@@ -168,6 +174,7 @@ public class Drawing{
                 }else if (point.get(identify).getMass() == 1 && wheelIncrease > 0){
                         point.get(identify).incrementMass(wheelIncrease);
                 }
+                max += wheelIncrease;
                 wheelIncrease = 0;
             }
             g.clearRect(0, 0, window.Width, window.Height);

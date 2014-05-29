@@ -5,8 +5,10 @@
 package drawing;
 
 import java.awt.Canvas;
+import java.awt.*;
 import java.awt.Color;
 import java.awt.image.BufferStrategy;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -17,6 +19,7 @@ public class Window {
     Canvas mainCanvas = new Canvas();
     JFrame frame  = new JFrame("Colliding Spheres in Space");
     BufferStrategy bufferStrategy; 
+    Button focusToggle = new Button("ASDASD");
     
     JPanel panel;
     
@@ -24,6 +27,8 @@ public class Window {
         panel = (JPanel) frame.getContentPane();
         panel.setSize(Height - 20, Width - 20);
         mainCanvas.setSize(Width, Height);
+        focusToggle.setSize(50,50);
+        panel.add(focusToggle);
         panel.add(mainCanvas);
         panel.setBackground(Color.black);
         
@@ -32,6 +37,8 @@ public class Window {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        
+        
         
         mainCanvas.createBufferStrategy(2);
         mainCanvas.requestFocus();
