@@ -28,6 +28,7 @@ public class Drawing{
     VectorMath math = new VectorMath();
     Collision collide = new Collision();
     Window window = new Window();
+    Menu menu = new Menu();
     
     
     ArrayList<Point> point = new ArrayList<>();
@@ -37,11 +38,13 @@ public class Drawing{
         
         
         window.init();
+        //menu.init();
         window.mainCanvas.addKeyListener(new KeyListen(){
             @Override
             public void keyPressed(KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_SPACE){
                     isRunning = !isRunning;
+                    window.menuPanelVisible(!isRunning);
                 }
                 if (ke.getKeyCode() == KeyEvent.VK_R && run){
                     double rMass = r.nextDouble()*r.nextInt(50)+1;
