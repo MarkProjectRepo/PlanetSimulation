@@ -23,7 +23,7 @@ public class Drawing{
     public boolean wasRunning = false;
     public boolean run = true;
     public boolean focusToggle = false;
-    
+    int focused = -1;
     double mx = Double.MAX_VALUE;
     double my = Double.MAX_VALUE;
     double wheelIncrease = 0;
@@ -46,14 +46,13 @@ public class Drawing{
         
         
         window.init();
-        //menu.init();
+        
         window.mainCanvas.addKeyListener(new KeyListen(){
             @Override
             public void keyPressed(KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_SPACE){
                     isRunning = !isRunning;
                     window.menuPanelVisible(!isRunning);
-                    //window.frame.setContentPane(window.menuPanel);
                 }
                 if (ke.getKeyCode() == KeyEvent.VK_R && run){
                     double rMass = r.nextDouble()*r.nextInt(50)+1;
@@ -85,6 +84,9 @@ public class Drawing{
                     wasRunning = true;
                 }else{
                     wasRunning = false;
+                }
+                if (focusToggle && focused >= 0){
+                    focusToggle = false;
                 }
                 clicked = true;
                 mx = Double.MAX_VALUE;
@@ -125,7 +127,7 @@ public class Drawing{
                     my = me.getY();
                     }
             }
-            int focused;
+            
             
             @Override
             public void mouseMoved(MouseEvent me) {
@@ -199,7 +201,11 @@ public class Drawing{
             if (time2 - time1 >= interval && isRunning && run) {
                 delta = (time2 - time1) / (double) sToNs;
                 //System.out.println((int)(1.0 / delta));
-                update(point);
+                if (focused != -1){
+                    regUpdate(point);
+                }else{
+                    focusUpdate(point);
+                }
                 time1 = time2;
             }else if (!isRunning){
                 time1 = time2;
@@ -229,7 +235,31 @@ public class Drawing{
         }
     }
     
-    public void update(ArrayList<Point> point){
+    public void focusUpdate(ArrayList<Point> point){
+        if (run){
+            
+            for (int i = 0; i < point.size(); i++){
+                
+                point.get(i).focusUpdate(point, point.get(focused), delta);
+                
+                for (int c = 0; c < point.size(); c++){
+                    
+                    if (c != i){
+                        if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
+                            
+                            if (collide.colliding(point.get(i), point.get(c))){
+
+                                collide.Coll(point.get(i), point.get(c));
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    public void regUpdate(ArrayList<Point> point){
                 
         if (run){
             

@@ -16,6 +16,7 @@ public class Point{
         
         private double x, y, dx, dy, mass;
         private boolean clicked;
+        public boolean focused = false;
         int identifier;
         VectorMath math = new VectorMath();
         Color c;
@@ -141,6 +142,17 @@ public class Point{
             setD(point);
             this.x += dx*delta;
             this.y += dy*delta;
+        }
+        public void focusUpdate(ArrayList<Point> point, Point p, double delta){
+            setD(point);
+            this.dx += p.getDx();
+            this.dy += p.getDy();
+            this.x += dx*delta;
+            this.y += dy*delta;
+        }
+        
+        public void setFocus(Boolean focused){
+            this.focused = focused;
         }
         
         /**
