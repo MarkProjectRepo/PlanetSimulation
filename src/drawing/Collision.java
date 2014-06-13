@@ -21,22 +21,14 @@ public class Collision {
         double X2ysubX1y = (point2.getY()-point1.getY());
         
         double dotProduct = (V2xsubV1x*X2xsubX1x)+(V2ysubV1y*X2ysubX1y);
-        if (dotProduct < 0){
-            return true;
-        }else{
-            return false;
-        }
+        return dotProduct < 0;
     }
     
     public boolean colliding(Point p1, Point p2){
-            double dist = math.distance(p1.getX(), p2.getX(), p1.getY(), p2.getY());
+        double dist = math.distance(p1.getX(), p2.getX(), p1.getY(), p2.getY());
             
-            if (dist < (p1.getRadius()+p2.getRadius())){
-                return true;
-            }else{
-                return false;
-            }
-        }
+        return dist < (p1.getRadius()+p2.getRadius());
+    }
     
     public void Coll(Point point1, Point point2){
         

@@ -23,7 +23,7 @@ public class Point{
         double diameter;
         
         Boolean coll = false;
-        final private double G = 1;
+        final private double G = 10;
          
         public Point(double x, double y, double mass, int index, boolean clicked){
             this.x = x;
@@ -210,14 +210,13 @@ public class Point{
         }
         
         private void setD(ArrayList<Point> p){
-            for (int i = 0; i < p.size(); i++){
-                double diffX = this.x-p.get(i).getX();
-                double diffY = this.y-p.get(i).getY();
-                if (p.get(i).getIdentifier() != this.identifier){
-                    double dist = math.distance (p.get(i).getX(), x, p.get(i).getY(), y);
-                    
-                    if (dist >= this.diameter+5){
-                        double g = -gravitate(dist, p.get(i).mass);
+            for (Point p1 : p) {
+                double diffX = this.x - p1.getX();
+                double diffY = this.y - p1.getY();
+                if (p1.getIdentifier() != this.identifier) {
+                    double dist = math.distance(p1.getX(), x, p1.getY(), y);
+                    if (dist >= this.diameter+5) {
+                        double g = -gravitate(dist, p1.mass);
                         dx += (g*diffX)/dist;
                         dy += (g*diffY)/dist;
                     }
@@ -234,7 +233,6 @@ public class Point{
             
             g.drawOval((int)(this.x-this.getRadius()), (int)(this.y-this.getRadius()), (int)diameter, (int)diameter);
             
-            //g.drawOval((int)this.x, (int)this.y, 1, 1);
             if (clicked){
                 g.drawChars(space.toCharArray(), 0, space.toCharArray().length, (int)x-2, (int)y-3);
             }

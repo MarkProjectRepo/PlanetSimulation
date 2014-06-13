@@ -18,7 +18,6 @@ public class Drawing{
     public double delta;
     
     public final int entities = 50;
-    
     public boolean isRunning = true;
     public boolean clicked = false;
     public boolean wasRunning = false;
@@ -73,8 +72,8 @@ public class Drawing{
                     point.add(new Point(me.getX(),me.getY(), 1,point.size(),true));
                     isRunning = true;
                 }else if(!run){
-                    for (int i = 0; i < point.size(); i++){
-                        point.get(i).setState(false);
+                    for (Point p1 : point){
+                        p1.setState(false);
                     }
                     run = true;
                 }
@@ -117,15 +116,17 @@ public class Drawing{
 
                     diffX = me.getX()-mx;
                     diffY = me.getY()-my;
-                    for (Point point1 : point) {
-                        point1.setX(point1.getX() + diffX);
-                        point1.setY(point1.getY() + diffY);
+                    
+                    for (Point p1 : point){
+                        p1.setX(p1.getX()+diffX);
+                        p1.setY(p1.getY()+diffY);
                     }
                     mx = me.getX();
                     my = me.getY();
-                }
+                    }
             }
             int focused;
+            
             @Override
             public void mouseMoved(MouseEvent me) {
                 if (focused >= 0){
@@ -220,18 +221,16 @@ public class Drawing{
     }
     
     public void paints(Graphics g){
-        for (int i =0; i < point.size(); i++){
-            if (point.get(i).getX() > -10 && point.get(i).getX() < window.Width ||
-                point.get(i).getY() > -10 && point.get(i).getY() < window.Height){
-                point.get(i).draw(g);
+        for (Point p1: point){
+            if (p1.getX() > -10 && p1.getX() < window.Width ||
+                p1.getY() > -10 && p1.getY() < window.Height){
+                p1.draw(g);
             }
         }
     }
     
     public void update(ArrayList<Point> point){
-        
-        ArrayList<Integer> checked = new ArrayList();
-        
+                
         if (run){
             
             for (int i = 0; i < point.size(); i++){
@@ -246,8 +245,6 @@ public class Drawing{
                             if (collide.colliding(point.get(i), point.get(c))){
 
                                 collide.Coll(point.get(i), point.get(c));
-                                checked.add(i);
-                                checked.add(c);
                             }
                         }
                     }
