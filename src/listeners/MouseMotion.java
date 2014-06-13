@@ -14,8 +14,6 @@ import java.awt.event.MouseMotionListener;
 public abstract class MouseMotion implements MouseMotionListener{
 
     
-    @Override
-    public void mouseMoved(MouseEvent me) {
-    }
+    
     
 }

@@ -17,9 +17,9 @@ public class Window {
     Canvas mainCanvas = new Canvas();
     JFrame frame  = new JFrame("Colliding Spheres in Space");
     
-    JPanel menuPanel = new JPanel();
+    Panel menuPanel = new Panel();
     
-    JButton cameraToggle = new JButton("Toggle Select");
+    Button cameraToggle = new Button("Toggle Select");
     
     BufferStrategy bufferStrategy; 
     
@@ -29,30 +29,34 @@ public class Window {
         panel = (JPanel) frame.getContentPane();
         panel.setSize(Height - 20, Width - 20);
         
+        menuPanel.setSize(Width,Height/4);
+        
+        
         mainCanvas.setSize(Width, Height);
         
-        menuPanel.setSize(Width,Height/4);
         menuPanel.setVisible(false);
         
-        cameraToggle.setSize(70, 20);
-        cameraToggle.setLocation(100,100);
+        cameraToggle.setSize(80, 20);
+        cameraToggle.setLocation(0,0);
         
-        menuPanel.add(cameraToggle);
-        frame.add(menuPanel);
+        menuPanel.setBackground(Color.white);
+        
+        panel.add(menuPanel);
         
         panel.add(mainCanvas);
         panel.setBackground(Color.black);
-        frame.getContentPane().add(mainCanvas);
         
+        frame.getContentPane().add(mainCanvas);
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         
-        
-        
         mainCanvas.createBufferStrategy(2);
+        
         mainCanvas.requestFocus();
+        
+        menuPanel.add(cameraToggle);
         
         bufferStrategy = mainCanvas.getBufferStrategy();
     }

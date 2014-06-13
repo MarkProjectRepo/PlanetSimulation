@@ -165,6 +165,7 @@ public class Point{
         public double getRadius(){
             return this.diameter/2;
         }
+        
         public void setDiameter(double diameter){
             this.diameter = diameter;
         }
@@ -186,7 +187,13 @@ public class Point{
             return mass;
         }
         
-        
+        /**
+         * Set the colour of the circle
+         * @param c (Color)
+         */
+        public void setColour(Color c){
+            this.c = c;
+        }
         
         public double getVelocity(){
             return Math.sqrt(Math.pow(this.dx, 2)+Math.pow(this.dy,2));

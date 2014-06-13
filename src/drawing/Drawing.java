@@ -1,10 +1,12 @@
 package drawing;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import java.util.ArrayList;
@@ -14,21 +16,28 @@ import math.VectorMath;
 
 public class Drawing{
     public double delta;
-    public final int entities = 500;
+    
+    public final int entities = 50;
+    
     public boolean isRunning = true;
     public boolean clicked = false;
     public boolean wasRunning = false;
     public boolean run = true;
+    public boolean focusToggle = false;
+    
     double mx = Double.MAX_VALUE;
     double my = Double.MAX_VALUE;
     double wheelIncrease = 0;
-    Button focusToggle;
+    
     int max = 0;
     int identify = 1111111111;
+    
     VectorMath math = new VectorMath();
     Collision collide = new Collision();
     Window window = new Window();
     Menu menu = new Menu();
+    
+    Tuple<Boolean, Integer> tuple = new Tuple<>();
     
     
     ArrayList<Point> point = new ArrayList<>();
@@ -45,6 +54,7 @@ public class Drawing{
                 if (ke.getKeyCode() == KeyEvent.VK_SPACE){
                     isRunning = !isRunning;
                     window.menuPanelVisible(!isRunning);
+                    //window.frame.setContentPane(window.menuPanel);
                 }
                 if (ke.getKeyCode() == KeyEvent.VK_R && run){
                     double rMass = r.nextDouble()*r.nextInt(50)+1;
@@ -107,15 +117,28 @@ public class Drawing{
 
                     diffX = me.getX()-mx;
                     diffY = me.getY()-my;
-                    for (int i = 0; i < point.size(); i++){
-                        point.get(i).setX(point.get(i).getX()+diffX);
-                        point.get(i).setY(point.get(i).getY()+diffY);
+                    for (Point point1 : point) {
+                        point1.setX(point1.getX() + diffX);
+                        point1.setY(point1.getY() + diffY);
                     }
                     mx = me.getX();
                     my = me.getY();
                 }
             }
-            
+            int focused;
+            @Override
+            public void mouseMoved(MouseEvent me) {
+                if (focused >= 0){
+                    point.get(focused).setColour(Color.white);
+                }
+                if (focusToggle){
+                     focused = isWithin(me.getX(), me.getY());
+                    if (focused >= 0){
+                        point.get(focused).setColour(Color.red);
+                    }
+                }
+                
+            }
         });
         
         window.mainCanvas.addMouseWheelListener(new MouseWheelListener(){
@@ -126,6 +149,15 @@ public class Drawing{
                     wheelIncrease = -mwe.getWheelRotation();
                 }
             }
+        });
+        
+        window.cameraToggle.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                focusToggle = true; 
+           }
+            
         });
         
         for (int u = 0; u < entities; u++){
@@ -143,6 +175,7 @@ public class Drawing{
         point.get(point.size()-1).setDx(10);
         point.get(point.size()-1).setDy(3);*/
     }
+    
     public void loop(){
         
         Graphics g = (Graphics)window.bufferStrategy.getDrawGraphics();
@@ -164,7 +197,7 @@ public class Drawing{
             }
             if (time2 - time1 >= interval && isRunning && run) {
                 delta = (time2 - time1) / (double) sToNs;
-                System.out.println((int)(1.0 / delta));
+                //System.out.println((int)(1.0 / delta));
                 update(point);
                 time1 = time2;
             }else if (!isRunning){
@@ -222,6 +255,15 @@ public class Drawing{
                 
             }
         }
+    }
+    
+    public int isWithin(double x, double y){
+        for (Point p: point){
+            if (math.distance(x, p.getX(), y, p.getY()) <= p.getRadius()){
+                return p.identifier;
+            }
+        }
+        return -1;
     }
     
     public static void main(String[] args) {
