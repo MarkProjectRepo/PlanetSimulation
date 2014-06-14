@@ -242,8 +242,9 @@ public class Point{
             g.setColor(c);
             
             String space = Double.toString(this.mass);
-            String vx = "VelocityinX:";
-            String vy = Double.toString(this.dy);
+            
+            String vx = "X-Velocity:" + Double.toString(dx);
+            String vy = "Y-Velocity:" + Double.toString(dy);
             
             g.drawOval((int)(this.x-this.getRadius()), (int)(this.y-this.getRadius()), (int)diameter, (int)diameter);
             
@@ -251,8 +252,8 @@ public class Point{
                 g.drawChars(space.toCharArray(), 0, space.toCharArray().length, (int)x-2, (int)y-3);
             }
             if (focused){
-                g.drawChars(vx.toCharArray(), 0, space.toCharArray().length, (int)0, (int)window.Height);
-                g.drawChars(vy.toCharArray(), 0, space.toCharArray().length, (int)x+5, (int)y-3);
+                g.drawChars(vx.toCharArray(), 0, vx.toCharArray().length, (int)5, (int)window.Height-16);
+                g.drawChars(vy.toCharArray(), 0, vy.toCharArray().length, (int)5, (int)window.Height-3);
             }
         }
     }

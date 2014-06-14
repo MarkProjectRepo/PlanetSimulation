@@ -43,9 +43,22 @@ public class Drawing{
     Random r = new Random();
     
     public Drawing() {
-        Button button = new Button();
+        JButton cameraToggle = new JButton("Toggle Select");
+        JButton cameraFree = new JButton("Free camera");
         
         window.init();
+        
+        int size = 115;
+        cameraToggle.setSize(size, 20);
+        cameraToggle.setLocation(0,0);
+        
+        cameraFree.setSize(110, 20);
+        cameraFree.setLocation(size, 0);
+        
+        size += 110;
+        
+        window.addToMenuPanel(cameraFree);
+        window.addToMenuPanel(cameraToggle);
         
         window.mainCanvas.addKeyListener(new KeyListen(){
             @Override
@@ -162,7 +175,7 @@ public class Drawing{
             }
         });
         
-        window.cameraToggle.addActionListener(new ActionListener(){
+        cameraToggle.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -170,7 +183,7 @@ public class Drawing{
            }
             
         });
-        window.cameraFree.addActionListener(new ActionListener(){
+        cameraFree.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -187,7 +200,7 @@ public class Drawing{
             double rMass = r.nextDouble()*r.nextInt(50)+1;
             point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width), rMass,u,false));
         }
-        point.add(new Point(200,250,1000000,501,false));
+        /*point.add(new Point(200,250,1000000,501,false));
         point.get(point.size()-1).setDx(0);
         point.get(point.size()-1).setDiameter(10);
         /*point.add(new Point(160,250,10,1,false));

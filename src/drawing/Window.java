@@ -19,8 +19,7 @@ public class Window {
     
     Panel menuPanel = new Panel();
     
-    Button cameraToggle = new Button("Toggle Select");
-    Button cameraFree = new Button("Free camera");
+    
     
     BufferStrategy bufferStrategy; 
     
@@ -37,11 +36,7 @@ public class Window {
         
         menuPanel.setVisible(false);
         
-        cameraToggle.setSize(80, 20);
-        cameraToggle.setLocation(0,0);
         
-        cameraFree.setSize(80, 20);
-        cameraFree.setLocation(80, 0);
         
         menuPanel.setBackground(Color.white);
         
@@ -59,9 +54,6 @@ public class Window {
         mainCanvas.createBufferStrategy(2);
         
         mainCanvas.requestFocus();
-        
-        menuPanel.add(cameraToggle);
-        menuPanel.add(cameraFree);
         
         bufferStrategy = mainCanvas.getBufferStrategy();
     }
