@@ -19,6 +19,7 @@ public class Point{
         public boolean focused = false;
         int identifier;
         VectorMath math = new VectorMath();
+        Window window = new Window();
         Color c;
         Random r = new Random();
         double diameter;
@@ -143,12 +144,11 @@ public class Point{
             this.x += dx*delta;
             this.y += dy*delta;
         }
+        
         public void focusUpdate(ArrayList<Point> point, Point p, double delta){
             setD(point);
-            this.dx += p.getDx();
-            this.dy += p.getDy();
-            this.x += dx*delta;
-            this.y += dy*delta;
+            this.x += (dx-p.getDx())*delta;
+            this.y += (dy-p.getDy())*delta;
         }
         
         public void setFocus(Boolean focused){
@@ -238,15 +238,21 @@ public class Point{
         
          
         public void draw(Graphics g){
-        	
+            
             g.setColor(c);
             
             String space = Double.toString(this.mass);
+            String vx = "VelocityinX:";
+            String vy = Double.toString(this.dy);
             
             g.drawOval((int)(this.x-this.getRadius()), (int)(this.y-this.getRadius()), (int)diameter, (int)diameter);
             
             if (clicked){
                 g.drawChars(space.toCharArray(), 0, space.toCharArray().length, (int)x-2, (int)y-3);
+            }
+            if (focused){
+                g.drawChars(vx.toCharArray(), 0, space.toCharArray().length, (int)0, (int)window.Height);
+                g.drawChars(vy.toCharArray(), 0, space.toCharArray().length, (int)x+5, (int)y-3);
             }
         }
     }

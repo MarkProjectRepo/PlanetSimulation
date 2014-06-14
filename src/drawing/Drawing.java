@@ -43,7 +43,7 @@ public class Drawing{
     Random r = new Random();
     
     public Drawing() {
-        
+        Button button = new Button();
         
         window.init();
         
@@ -76,6 +76,15 @@ public class Drawing{
                     }
                     run = true;
                 }
+                if (focusToggle && focused >= 0){
+                    for (Point p : point){
+                        p.setFocus(false);
+                        p.setColour(Color.white);
+                    }
+                    point.get(focused).setFocus(true);
+                    point.get(focused).setColour(Color.red);
+                    focusToggle = false;
+                }
             }
             @Override
             public void mousePressed(MouseEvent me) {
@@ -85,9 +94,7 @@ public class Drawing{
                 }else{
                     wasRunning = false;
                 }
-                if (focusToggle && focused >= 0){
-                    focusToggle = false;
-                }
+                
                 clicked = true;
                 mx = Double.MAX_VALUE;
                 my = Double.MAX_VALUE;
@@ -125,17 +132,18 @@ public class Drawing{
                     }
                     mx = me.getX();
                     my = me.getY();
-                    }
+                }
             }
             
             
             @Override
             public void mouseMoved(MouseEvent me) {
-                if (focused >= 0){
-                    point.get(focused).setColour(Color.white);
-                }
+                
                 if (focusToggle){
-                     focused = isWithin(me.getX(), me.getY());
+                    if (focused >= 0){
+                        point.get(focused).setColour(Color.white);
+                    }
+                    focused = isWithin(me.getX(), me.getY());
                     if (focused >= 0){
                         point.get(focused).setColour(Color.red);
                     }
@@ -162,12 +170,24 @@ public class Drawing{
            }
             
         });
+        window.cameraFree.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (Point p : point){
+                    p.setFocus(false);
+                    p.setColour(Color.white);
+                }
+                focused = -1;
+            }
+            
+        });
         
         for (int u = 0; u < entities; u++){
             double rMass = r.nextDouble()*r.nextInt(50)+1;
             point.add(new Point(r.nextInt(window.Height), r.nextInt(window.Width), rMass,u,false));
         }
-        /*point.add(new Point(200,250,1000000,501,false));
+        point.add(new Point(200,250,1000000,501,false));
         point.get(point.size()-1).setDx(0);
         point.get(point.size()-1).setDiameter(10);
         /*point.add(new Point(160,250,10,1,false));
@@ -201,7 +221,7 @@ public class Drawing{
             if (time2 - time1 >= interval && isRunning && run) {
                 delta = (time2 - time1) / (double) sToNs;
                 //System.out.println((int)(1.0 / delta));
-                if (focused != -1){
+                if (focused < 0){
                     regUpdate(point);
                 }else{
                     focusUpdate(point);
@@ -215,7 +235,7 @@ public class Drawing{
                 if (point.get(identify).getMass() > 1 && wheelIncrease != 0){
                     point.get(identify).incrementMass(wheelIncrease);
                 }else if (point.get(identify).getMass() == 1 && wheelIncrease > 0){
-                        point.get(identify).incrementMass(wheelIncrease);
+                    point.get(identify).incrementMass(wheelIncrease);
                 }
                 max += wheelIncrease;
                 wheelIncrease = 0;
@@ -236,32 +256,48 @@ public class Drawing{
     }
     
     public void focusUpdate(ArrayList<Point> point){
-        if (run){
-            
-            for (int i = 0; i < point.size(); i++){
+        double diffX, diffY;
+        double px = Double.MAX_VALUE, py = Double.MAX_VALUE;
+        for (int i = 0; i < point.size(); i++){
                 
-                point.get(i).focusUpdate(point, point.get(focused), delta);
-                
-                for (int c = 0; c < point.size(); c++){
-                    
-                    if (c != i){
-                        if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
-                            
-                            if (collide.colliding(point.get(i), point.get(c))){
+            point.get(i).focusUpdate(point, point.get(focused), delta);
 
-                                collide.Coll(point.get(i), point.get(c));
-                            }
+            for (int c = 0; c < point.size(); c++){
+
+                if (c != i){
+                    if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
+
+                        if (collide.colliding(point.get(i), point.get(c))){
+
+                            collide.Coll(point.get(i), point.get(c));
                         }
                     }
                 }
-                
             }
+            
+            
+            /*if (px == Double.MAX_VALUE) {
+                px = point.get(focused).getX();
+                py = point.get(focused).getY();
+            }
+
+            diffX = point.get(focused).getX()-px;
+            diffY = point.get(focused).getY()-py;
+
+            for (Point p1 : point){
+                if (p1 != point.get(focused)){
+                    p1.setX(p1.getX()+diffX);
+                    p1.setY(p1.getY()+diffY);
+                }
+            }
+            px = point.get(focused).getX();
+            py = point.get(focused).getY();
+            */
         }
     }
     
     public void regUpdate(ArrayList<Point> point){
                 
-        if (run){
             
             for (int i = 0; i < point.size(); i++){
                 
@@ -281,13 +317,12 @@ public class Drawing{
                 }
                 
             }
-        }
     }
     
     public int isWithin(double x, double y){
-        for (Point p: point){
-            if (math.distance(x, p.getX(), y, p.getY()) <= p.getRadius()){
-                return p.identifier;
+        for (int i = 0; i < point.size(); i++){
+            if (math.distance(x, point.get(i).getX(), y, point.get(i).getY()) <= point.get(i).getRadius()){
+                return i;
             }
         }
         return -1;
