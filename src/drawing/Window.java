@@ -29,7 +29,7 @@ public class Window {
         panel = (JPanel) frame.getContentPane();
         panel.setSize(Height - 20, Width - 20);
         
-        menuPanel.setSize(Width,Height/4);
+        menuPanel.setSize(Width,20);
         
         
         mainCanvas.setSize(Width, Height);

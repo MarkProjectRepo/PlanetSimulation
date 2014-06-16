@@ -23,6 +23,7 @@ public class Drawing{
     public boolean wasRunning = false;
     public boolean run = true;
     public boolean focusToggle = false;
+    public int gameState = 0;
     int focused = -1;
     double mx = Double.MAX_VALUE;
     double my = Double.MAX_VALUE;
@@ -43,6 +44,7 @@ public class Drawing{
     Random r = new Random();
     
     public Drawing() {
+        
         JButton cameraToggle = new JButton("Toggle Select");
         JButton cameraFree = new JButton("Free camera");
         
@@ -65,6 +67,7 @@ public class Drawing{
             public void keyPressed(KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_SPACE){
                     isRunning = !isRunning;
+                    gameState = 1;
                     window.menuPanelVisible(!isRunning);
                 }
                 if (ke.getKeyCode() == KeyEvent.VK_R && run){
@@ -88,6 +91,7 @@ public class Drawing{
                         p1.setState(false);
                     }
                     run = true;
+                    //gameState = 2;
                 }
                 if (focusToggle && focused >= 0){
                     for (Point p : point){
@@ -104,8 +108,10 @@ public class Drawing{
                 if (isRunning){
                     isRunning = false;
                     wasRunning = true;
+                    //gameState = 2;
                 }else{
                     wasRunning = false;
+                    //gameState = 3;
                 }
                 
                 clicked = true;
@@ -156,7 +162,7 @@ public class Drawing{
                     if (focused >= 0){
                         point.get(focused).setColour(Color.white);
                     }
-                    focused = isWithin(me.getX(), me.getY());
+                    focused = math.isWithin(point, me.getX(), me.getY());
                     if (focused >= 0){
                         point.get(focused).setColour(Color.red);
                     }
@@ -310,37 +316,28 @@ public class Drawing{
     }
     
     public void regUpdate(ArrayList<Point> point){
-                
-            
-            for (int i = 0; i < point.size(); i++){
-                
-                point.get(i).regUpdate(point, delta);
-                
-                for (int c = 0; c < point.size(); c++){
-                    
-                    if (c != i){
-                        if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
-                            
-                            if (collide.colliding(point.get(i), point.get(c))){
+        
+        for (int i = 0; i < point.size(); i++){
 
-                                collide.Coll(point.get(i), point.get(c));
-                            }
+            point.get(i).regUpdate(point, delta);
+
+            for (int c = 0; c < point.size(); c++){
+
+                if (c != i){
+                    if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
+
+                        if (collide.colliding(point.get(i), point.get(c))){
+
+                            collide.Coll(point.get(i), point.get(c));
                         }
                     }
                 }
-                
             }
-    }
-    
-    public int isWithin(double x, double y){
-        for (int i = 0; i < point.size(); i++){
-            if (math.distance(x, point.get(i).getX(), y, point.get(i).getY()) <= point.get(i).getRadius()){
-                return i;
-            }
+
         }
-        return -1;
     }
     
+
     public static void main(String[] args) {
         Drawing drawing = new Drawing();
         drawing.loop();
