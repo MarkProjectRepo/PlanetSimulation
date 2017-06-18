@@ -164,6 +164,11 @@ public class Point{
             this.diameter += massIncrement;
         }
         
+        /**
+         * Used to simulate random mass/radius points.
+         * 
+         * @param max Maximum mass given to the point
+         */
         public void randomizeMassandRadius(int max){
             double rMass = r.nextDouble()*r.nextInt(max)+1;
             this.mass = rMass;
@@ -207,20 +212,40 @@ public class Point{
             this.c = c;
         }
         
+        /**
+         * Returns the velocity of the point as a vector
+         * 
+         * @return Velocity (double)
+         */
         public double getVelocity(){
             return Math.sqrt(Math.pow(this.dx, 2)+Math.pow(this.dy,2));
         }
         
+        /**
+         * Not used anywhere, purely theoretical.
+         * @return Angular velocity (double)
+         */
         public double velocityAngle(){
             return Math.atan2(this.dy, this.dx);
         }
         
         
-        
+        /**
+         * Function for the gravitational pull to another body.
+         * 
+         * @param distance
+         * @param mass1
+         * @return 
+         */
         private double gravitate(double distance, double mass1){
             return G*mass1/(Math.pow(distance, 2) + 1);
         }
         
+        /**
+         * Update velocity based of gravitation to every body.
+         * 
+         * @param p 
+         */
         private void setD(ArrayList<Point> p){
             for (Point p1 : p) {
                 double diffX = this.x - p1.getX();

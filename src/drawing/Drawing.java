@@ -15,7 +15,7 @@ import listeners.*;
 import math.VectorMath;
 
 public class Drawing{
-    public double delta;
+    public double delta; //Timing variable
     
     public final int entities = 50;
     public boolean isRunning = true;

@@ -14,14 +14,8 @@ public class Collision {
     VectorMath math = new VectorMath();
     
     private boolean doTheMath(Point point1, Point point2){
-        double V2xsubV1x = (point2.getDx()-point1.getDx());
-        double V2ysubV1y = (point2.getDy()-point1.getDy());
-        
-        double X2xsubX1x = (point2.getX()-point1.getX());
-        double X2ysubX1y = (point2.getY()-point1.getY());
-        
-        double dotProduct = (V2xsubV1x*X2xsubX1x)+(V2ysubV1y*X2ysubX1y);
-        return dotProduct < 0;
+        //This is the dot product of point 2 - point1
+        return ((point2.getDx()-point1.getDx())*(point2.getX()-point1.getX()))+((point2.getDy()-point1.getDy())*(point2.getY()-point1.getY())) < 0;
     }
     
     public boolean colliding(Point p1, Point p2){
@@ -30,6 +24,14 @@ public class Collision {
         return dist < (p1.getRadius()+p2.getRadius());
     }
     
+    
+    /**
+     * This function is responsible for doing the math for a 2d collision
+     * between two points. Collisions are passed directly, hence void type.
+     * 
+     * @param point1 The first point in the collision check
+     * @param point2 The second point in the collision check
+     */
     public void Coll(Point point1, Point point2){
         
         if (doTheMath(point1, point2)){
