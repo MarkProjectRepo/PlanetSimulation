@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package drawing;
 
 import java.awt.Color;
@@ -10,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import math.VectorMath;
 /**
- * @author matra4214
+ * @author Mark Traquair - Started in 2013/14
  */
 public class Point{
         

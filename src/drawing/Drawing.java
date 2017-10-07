@@ -281,7 +281,7 @@ public class Drawing{
                 
             point.get(i).focusUpdate(point, point.get(focused), delta);
 
-            for (int c = 0; c < point.size(); c++){
+            for (int c = i; c < point.size(); c++){
 
                 if (c != i){
                     if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
@@ -321,7 +321,7 @@ public class Drawing{
 
             point.get(i).regUpdate(point, delta);
 
-            for (int c = 0; c < point.size(); c++){
+            for (int c = i; c < point.size(); c++){
 
                 if (c != i){
                     if (point.get(i).getIdentifier() != point.get(c).getIdentifier()){
