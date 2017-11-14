@@ -12,6 +12,8 @@ Hit space to pause time and show options menu (options menu is toggling on or of
 
 Click and drag to move around
 
+Double click to create a new planet and scroll to increase/decrease size and mass. Press **R** to randomize the size and mass within the bounds of your max scrolled mass.
+
 Escape closes the program
 
 Message me if you have any suggestions or questions!
