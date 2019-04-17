@@ -4,7 +4,7 @@ PlanetSimulation
 This netbeans project is a simulation of "planets" in 2d space, using entirely native libraries provided in Java.
 By no means is this optimized for maximum performance, and future updates will almost entirely focus on improving performance.
 
-Comments are also being added after the fact, as I had made this in highschool 5+ years ago without comments some of the functions are extremely difficult to follow (I find)
+Comments are also being added after the fact, as I had made this in highschool 5+ years ago without comments
 
 **Controls**
 
